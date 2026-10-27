@@ -209,7 +209,9 @@ need to be tested in Fatality.
 ### Autopeek background sampling
 
 Glass revision 3 requires the Autopeek client with `capture_background` support.
-The optional boolean descriptor field requests a single scene-background capture
-per marker frame. Mesh cells reuse that snapshot, avoiding repeated capture and
-feedback. Background UVs come from screen position, not the encoded plane UVs.
+The optional boolean descriptor field binds the shared scene-background texture
+from `draw.adapter:GetSharedTexture()` to the shader. Fatality updates it once
+before the drawing layer; mesh cells reuse that snapshot without recapturing it.
+The previous texture and command flags are restored after drawing. Background
+UVs come from screen position, not the encoded plane UVs.
 This is a screen-space blur and does not provide scene depth or player occlusion.
