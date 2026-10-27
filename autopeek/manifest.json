@@ -10,7 +10,7 @@
     {
       "id": "glass",
       "name": "Glass",
-      "revision": 3,
+      "revision": 4,
       "author": "kissd"
     },
     {
@@ -18,6 +18,12 @@
       "name": "Radial",
       "revision": 1,
       "author": "kissd"
+    },
+    {
+      "id": "halo",
+      "name": "Halo",
+      "revision": 1,
+      "author": "Codex"
     }
   ]
 }

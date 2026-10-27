@@ -215,3 +215,18 @@ before the drawing layer; mesh cells reuse that snapshot without recapturing it.
 The previous texture and command flags are restored after drawing. Background
 UVs come from screen position, not the encoded plane UVs.
 This is a screen-space blur and does not provide scene depth or player occlusion.
+
+
+### Autopeek style updates
+
+Glass revision 4 keeps the revision 3 scene blur and uses a thinner outline with
+a tighter glow fringe. Earlier immutable revisions remain available.
+
+Halo (by Codex), revision 1, adds a thin round contour, two slowly orbiting light
+accents, a faint interior and a restrained expanding pulse. It uses the standard
+Radius, Opacity, Speed and Color controls and needs no background capture. Its
+release fade follows the existing encoded-UV contract; no Lua update is needed.
+
+The current Autopeek client depth-masks these GUI shaders against scene depth.
+Effect authors must leave t1 and b1/b2 free for that client wrapper. The observed
+world viewport range is 0..0.95; the client excludes the separate viewmodel band.
