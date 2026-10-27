@@ -1,4 +1,4 @@
-# Shaders — cloud effect library
+# Shaders вЂ” cloud effect library
 
 The public style library for three standalone clients, each with its own tab:
 
@@ -30,8 +30,8 @@ Included styles:
   orientation rather than player translation.
 - **Autopeek / Ripples:** the existing 20-sided ring and outward waves;
   color, radius, opacity and animation speed.
-- **Autopeek / Glass:** a smooth circular rim, translucent tinted fill and subtle
-  glass-like sheen; color, radius and opacity.
+- **Autopeek / Glass:** a smooth circular rim, blurred scene background and tinted
+  frosted-glass fill; color, radius and opacity.
 - **Autopeek / Radial:** a bright center fading continuously to a transparent
   outer edge; color, radius and opacity.
 
@@ -67,7 +67,7 @@ the special `"binding": "speed"`. `group` is `main` or `colors`.
 
 | Type | Extra fields | GPU representation |
 | --- | --- | --- |
-| `slider` | `min`, `max`, `step`, optional `scale` | value × scale (default 1) |
+| `slider` | `min`, `max`, `step`, optional `scale` | value Г— scale (default 1) |
 | `select` | `options`: array of labels | zero-based selected index |
 | `checkbox` | boolean default | 0 or 1 |
 | `color` | RGB default, e.g. `[180,222,255]` | 3 consecutive normalized floats |
@@ -88,8 +88,8 @@ Example:
 }
 ```
 
-Slots are **1–15**, must not overlap, and colors occupy three slots.
-A speed slider uses `"binding":"speed"` instead of `slot`, range 0–300,
+Slots are **1вЂ“15**, must not overlap, and colors occupy three slots.
+A speed slider uses `"binding":"speed"` instead of `slot`, range 0вЂ“300,
 and controls the animation clock (100 = normal speed). It consumes no GPU slot.
 Slider formatting is selected locally; JSON cannot supply arbitrary printf formats.
 
@@ -136,7 +136,7 @@ native binding lock. UI and compilation work run outside the HTTP callback.
 ## Weapon contract 1
 
 Files live under `weapons/styles/<id>/<revision>.*`. JSON controls follow the
-same schema. **Only slots 1–7 are available to effects**. Slots 8–15 are written
+same schema. **Only slots 1вЂ“7 are available to effects**. Slots 8вЂ“15 are written
 by the renderer and cannot be assigned controls:
 
 | Slots | Meaning |
@@ -166,10 +166,10 @@ Its controls have fixed CPU meanings:
 
 | Slots | Meaning |
 | --- | --- |
-| 1–3 | normalized RGB, passed through `i.col.rgb` |
+| 1вЂ“3 | normalized RGB, passed through `i.col.rgb` |
 | 4 | ground-plane projection radius, in world units |
 | 5 | opacity multiplier, passed through `i.col.a` |
-| 6–15 | reserved; not available to controls |
+| 6вЂ“15 | reserved; not available to controls |
 
 The optional `binding: speed` slider changes animation speed on the CPU.
 Changing these values does not recompile HLSL. Arbitrary extra GPU uniforms are
@@ -205,3 +205,11 @@ python tools/check_shader_menus.py
 
 These are offline checks; in-game appearance and the actual Fatality UI still
 need to be tested in Fatality.
+
+### Autopeek background sampling
+
+Glass revision 3 requires the Autopeek client with `capture_background` support.
+The optional boolean descriptor field requests a single scene-background capture
+per marker frame. Mesh cells reuse that snapshot, avoiding repeated capture and
+feedback. Background UVs come from screen position, not the encoded plane UVs.
+This is a screen-space blur and does not provide scene depth or player occlusion.
