@@ -21,7 +21,7 @@ New styles appear without a Lua update as long as they use contract 1.
 1. Give the effect a lowercase ID such as `aurora`.
 2. Add `styles/aurora/1.json` describing the controls.
 3. Add `styles/aurora/1.hlsl` implementing a `main` pixel shader.
-4. Add `{"id":"aurora","name":"Aurora","revision":1}` to
+4. Add `{"id":"aurora","name":"Aurora","author":"your name","revision":1}` to
    the `effects` array in `manifest.json`.
 5. Compile/test before publishing. For changes, add a new numbered pair and
    increase the catalog revision. Published numbered files are immutable.
@@ -30,6 +30,9 @@ The catalog and per-effect JSON each have `"contract": 1`.
 The client accepts at most 24 cloud effects and 16 controls per effect.
 Each HLSL file is limited to 64 KiB. JSON files are limited to 32 KiB.
 IDs cannot contain paths or URLs. Downloads stay under this repository.
+The catalog `author` field is displayed as `Aurora (by your name)` and is also
+searchable. It accepts up to 32 characters. Older catalogs without this field
+remain compatible and display `Unknown`; no author is inferred from shader code.
 
 ## Control schema
 
