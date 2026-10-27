@@ -1,4 +1,4 @@
-# Shaders — cloud effect library
+# Shaders вЂ” cloud effect library
 
 The public style library for three standalone clients, each with its own tab:
 
@@ -67,7 +67,7 @@ the special `"binding": "speed"`. `group` is `main` or `colors`.
 
 | Type | Extra fields | GPU representation |
 | --- | --- | --- |
-| `slider` | `min`, `max`, `step`, optional `scale` | value × scale (default 1) |
+| `slider` | `min`, `max`, `step`, optional `scale` | value Г— scale (default 1) |
 | `select` | `options`: array of labels | zero-based selected index |
 | `checkbox` | boolean default | 0 or 1 |
 | `color` | RGB default, e.g. `[180,222,255]` | 3 consecutive normalized floats |
@@ -88,8 +88,8 @@ Example:
 }
 ```
 
-Slots are **1–15**, must not overlap, and colors occupy three slots.
-A speed slider uses `"binding":"speed"` instead of `slot`, range 0–300,
+Slots are **1вЂ“15**, must not overlap, and colors occupy three slots.
+A speed slider uses `"binding":"speed"` instead of `slot`, range 0вЂ“300,
 and controls the animation clock (100 = normal speed). It consumes no GPU slot.
 Slider formatting is selected locally; JSON cannot supply arbitrary printf formats.
 
@@ -136,7 +136,7 @@ native binding lock. UI and compilation work run outside the HTTP callback.
 ## Weapon contract 1
 
 Files live under `weapons/styles/<id>/<revision>.*`. JSON controls follow the
-same schema. **Only slots 1–7 are available to effects**. Slots 8–15 are written
+same schema. **Only slots 1вЂ“7 are available to effects**. Slots 8вЂ“15 are written
 by the renderer and cannot be assigned controls:
 
 | Slots | Meaning |
@@ -166,10 +166,10 @@ Its controls have fixed CPU meanings:
 
 | Slots | Meaning |
 | --- | --- |
-| 1–3 | normalized RGB, passed through `i.col.rgb` |
+| 1вЂ“3 | normalized RGB, passed through `i.col.rgb` |
 | 4 | ground-plane projection radius, in world units |
 | 5 | opacity multiplier, passed through `i.col.a` |
-| 6–15 | reserved; not available to controls |
+| 6вЂ“15 | reserved; not available to controls |
 
 The optional `binding: speed` slider changes animation speed on the CPU.
 Changing these values does not recompile HLSL. Arbitrary extra GPU uniforms are
@@ -230,3 +230,31 @@ release fade follows the existing encoded-UV contract; no Lua update is needed.
 The current Autopeek client depth-masks these GUI shaders against scene depth.
 Effect authors must leave t1 and b1/b2 free for that client wrapper. The observed
 world viewport range is 0..0.95; the client excludes the separate viewmodel band.
+
+
+### Per-style radius at 50 percent
+
+The updated Autopeek client displays Radius in percent. New descriptors start
+at 50, which retains the previous physical radius of 42 world units. The existing
+slider conversion is unchanged: `world_radius = displayed_percent * scale`.
+
+To give each style a different initial size while keeping 50% in the menu,
+change only its radius control's `scale`. For example:
+
+```json
+{"key":"radius","label":"Radius","type":"slider","slot":4,
+ "min":10,"max":100,"step":1,"default":50,"scale":0.84}
+```
+
+Use scale 0.60 for radius 30 at 50%, 0.84 for radius 42, or 1.00 for radius 50.
+The formula is `scale = desired_radius_at_50 / 50`. The displayed default stays
+50; do not change it to set physical size. At 100% the radius is twice the 50%
+size. The renderer currently clamps physical radius to 8..128 world units.
+Styles draw different proportions inside that carrier, so compare them in game
+when choosing a baseline. Existing user choices within a style revision remain
+preserved; descriptor defaults apply when that revision is first selected.
+
+Publish a new immutable JSON/HLSL revision and update the manifest after changes,
+even if HLSL itself is identical. Refresh library fetches it; editing GitHub assets
+does not update an already cached immutable revision. An updated client Lua is
+needed for the percent suffix; older clients still apply the same scale correctly.
