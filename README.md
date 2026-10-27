@@ -30,6 +30,10 @@ Included styles:
   orientation rather than player translation.
 - **Autopeek / Ripples:** the existing 20-sided ring and outward waves;
   color, radius, opacity and animation speed.
+- **Autopeek / Glass:** a smooth circular rim, translucent tinted fill and subtle
+  glass-like sheen; color, radius and opacity.
+- **Autopeek / Radial:** a bright center fading continuously to a transparent
+  outer edge; color, radius and opacity.
 
 The original Gradient is built into the Lua and remains available offline.
 Weapon includes Hologram and Autopeek includes Ripples as offline fallbacks.
