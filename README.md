@@ -1,6 +1,6 @@
 # Shaders — cloud effect library
 
-The public style library for three standalone clients in the shared **Shaders** tab:
+The public style library for three standalone clients, each with its own tab:
 
 | Client | Menu section | Catalog |
 | --- | --- | --- |
@@ -8,10 +8,9 @@ The public style library for three standalone clients in the shared **Shaders** 
 | `weapon_cloud.lua` | Weapon | `weapons/manifest.json` |
 | `autopeek_cloud.lua` | Autopeek | `autopeek/manifest.json` |
 
-No fourth GUI-host script is needed. Each client embeds a coordinator: one active
-client owns the whole GUI while the others exchange serialized settings with it
-through a PID-scoped Windows shared-memory channel. GUI objects stay in their
-owner's Lua state. A remaining client can take over when the owner unloads.
+Each client owns a separate top-level tab: **Skybox**, **Weapon** or **Autopeek**.
+No shared GUI coordinator, shared-memory transport or fourth Lua is used. The
+experimental shared-menu coordinator was removed after a live CS2 crash.
 
 The Lua and native bridge are not distributed through this repository.
 Only HLSL pixel shaders and declarative JSON controls are downloaded.
@@ -185,7 +184,7 @@ Enable **FFI** and **HTTP**. **Filesystem** is optional for disk caching.
 Disable other sky-effect scripts before loading the cloud client.
 For Weapon, disable `weapon_galaxy.lua` / `weapon_hologram.lua` before loading
 `weapon_cloud.lua`. For Autopeek, disable `autopeek_portal.lua` before loading
-`autopeek_cloud.lua`. The three cloud clients can register their GUI in any order.
+`autopeek_cloud.lua`. The three cloud clients use distinct tab IDs and do not share GUI containers.
 This library does not distribute the client or make guarantees about Marketplace
 approval or compatibility with future CS2/Fatality changes.
 
@@ -197,8 +196,7 @@ python tools/check_sky_bridge.py skybox_cloud.lua
 python tools/check_weapon_galaxy.py weapon_cloud.lua
 python tools/check_autopeek_portal.py autopeek_cloud.lua
 python tools/check_cloud_assets.py
-python tools/check_shader_coordination.py
-python tools/check_shader_cloud_bus.py
+python tools/check_shader_menus.py
 ```
 
 These are offline checks; in-game appearance and the actual Fatality UI still
