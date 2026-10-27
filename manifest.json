@@ -1,0 +1,15 @@
+{
+  "contract": 1,
+  "effects": [
+    {
+      "id": "lines",
+      "name": "Lines",
+      "revision": 1
+    },
+    {
+      "id": "galaxy",
+      "name": "Galaxy",
+      "revision": 1
+    }
+  ]
+}

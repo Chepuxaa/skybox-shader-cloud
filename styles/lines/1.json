@@ -1,0 +1,110 @@
+{
+  "contract": 1,
+  "id": "lines",
+  "name": "Lines",
+  "revision": 1,
+  "controls": [
+    {
+      "key": "animation",
+      "label": "Animation",
+      "type": "select",
+      "slot": 1,
+      "options": [
+        "Static",
+        "Scroll",
+        "Wave"
+      ],
+      "default": 1
+    },
+    {
+      "key": "speed",
+      "label": "Speed",
+      "type": "slider",
+      "binding": "speed",
+      "min": 0,
+      "max": 300,
+      "step": 1,
+      "default": 100
+    },
+    {
+      "key": "strength",
+      "label": "Wave strength",
+      "type": "slider",
+      "slot": 2,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 35,
+      "scale": 0.01
+    },
+    {
+      "key": "spacing",
+      "label": "Line count",
+      "type": "slider",
+      "slot": 7,
+      "min": 4,
+      "max": 48,
+      "step": 1,
+      "default": 18,
+      "scale": 1
+    },
+    {
+      "key": "thickness",
+      "label": "Line thickness",
+      "type": "slider",
+      "slot": 11,
+      "min": 1,
+      "max": 15,
+      "step": 1,
+      "default": 4,
+      "scale": 0.01
+    },
+    {
+      "key": "glow",
+      "label": "Glow",
+      "type": "slider",
+      "slot": 3,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 35,
+      "scale": 0.01
+    },
+    {
+      "key": "lower",
+      "label": "Lower sky",
+      "slot": 4,
+      "type": "color",
+      "default": [
+        23,
+        13,
+        35
+      ],
+      "group": "colors"
+    },
+    {
+      "key": "upper",
+      "label": "Upper sky",
+      "slot": 8,
+      "type": "color",
+      "default": [
+        5,
+        8,
+        22
+      ],
+      "group": "colors"
+    },
+    {
+      "key": "light",
+      "label": "Glow color",
+      "slot": 12,
+      "type": "color",
+      "default": [
+        239,
+        148,
+        214
+      ],
+      "group": "colors"
+    }
+  ]
+}
