@@ -1,0 +1,20 @@
+{
+  "contract": 1,
+  "id": "hologram",
+  "name": "Hologram",
+  "revision": 1,
+  "controls": [
+    {
+      "key": "tint",
+      "label": "Color",
+      "type": "color",
+      "slot": 4,
+      "default": [
+        20,
+        217,
+        255
+      ],
+      "group": "colors"
+    }
+  ]
+}

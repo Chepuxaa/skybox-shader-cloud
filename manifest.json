@@ -12,6 +12,18 @@
       "name": "Galaxy",
       "revision": 1,
       "author": "kissd"
+    },
+    {
+      "id": "retro",
+      "name": "Retro",
+      "revision": 1,
+      "author": "kissd"
+    },
+    {
+      "id": "portal",
+      "name": "Portal",
+      "revision": 1,
+      "author": "kissd"
     }
   ]
 }

@@ -1,0 +1,17 @@
+{
+  "contract": 1,
+  "effects": [
+    {
+      "id": "galaxy",
+      "name": "Galaxy",
+      "revision": 1,
+      "author": "kissd"
+    },
+    {
+      "id": "hologram",
+      "name": "Hologram",
+      "revision": 1,
+      "author": "kissd"
+    }
+  ]
+}

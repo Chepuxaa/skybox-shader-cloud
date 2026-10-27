@@ -1,0 +1,121 @@
+{
+  "contract": 1,
+  "id": "portal",
+  "name": "Portal",
+  "revision": 1,
+  "controls": [
+    {
+      "key": "animation",
+      "label": "Animation",
+      "type": "select",
+      "slot": 1,
+      "options": [
+        "Static",
+        "Spin",
+        "Vortex"
+      ],
+      "default": 1
+    },
+    {
+      "key": "speed",
+      "label": "Speed",
+      "type": "slider",
+      "binding": "speed",
+      "min": 0,
+      "max": 300,
+      "step": 1,
+      "default": 100
+    },
+    {
+      "key": "direction",
+      "label": "Direction",
+      "type": "slider",
+      "slot": 7,
+      "min": -180,
+      "max": 180,
+      "step": 1,
+      "default": 0,
+      "scale": 0.017453292519943295
+    },
+    {
+      "key": "elevation",
+      "label": "Elevation",
+      "type": "slider",
+      "slot": 11,
+      "min": -80,
+      "max": 85,
+      "step": 1,
+      "default": 70,
+      "scale": 0.017453292519943295
+    },
+    {
+      "key": "size",
+      "label": "Size",
+      "type": "slider",
+      "slot": 15,
+      "min": 3,
+      "max": 60,
+      "step": 1,
+      "default": 20,
+      "scale": 0.017453292519943295
+    },
+    {
+      "key": "strength",
+      "label": "Strength",
+      "type": "slider",
+      "slot": 2,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 65,
+      "scale": 0.01
+    },
+    {
+      "key": "glow",
+      "label": "Glow",
+      "type": "slider",
+      "slot": 3,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 75,
+      "scale": 0.01
+    },
+    {
+      "key": "lower",
+      "label": "Lower sky",
+      "slot": 4,
+      "type": "color",
+      "default": [
+        2,
+        3,
+        12
+      ],
+      "group": "colors"
+    },
+    {
+      "key": "upper",
+      "label": "Upper sky",
+      "slot": 8,
+      "type": "color",
+      "default": [
+        105,
+        42,
+        210
+      ],
+      "group": "colors"
+    },
+    {
+      "key": "light",
+      "label": "Glow color",
+      "slot": 12,
+      "type": "color",
+      "default": [
+        255,
+        145,
+        65
+      ],
+      "group": "colors"
+    }
+  ]
+}

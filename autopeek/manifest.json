@@ -1,0 +1,11 @@
+{
+  "contract": 1,
+  "effects": [
+    {
+      "id": "ripples",
+      "name": "Ripples",
+      "revision": 1,
+      "author": "kissd"
+    }
+  ]
+}
