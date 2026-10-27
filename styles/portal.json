@@ -2,7 +2,6 @@
   "contract": 1,
   "id": "portal",
   "name": "Portal",
-  "revision": 1,
   "controls": [
     {
       "key": "animation",

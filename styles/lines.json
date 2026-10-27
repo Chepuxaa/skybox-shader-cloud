@@ -2,7 +2,6 @@
   "contract": 1,
   "id": "lines",
   "name": "Lines",
-  "revision": 1,
   "controls": [
     {
       "key": "animation",

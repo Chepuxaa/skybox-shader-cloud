@@ -4,25 +4,21 @@
     {
       "id": "lines",
       "name": "Lines",
-      "revision": 1,
       "author": "kissd"
     },
     {
       "id": "galaxy",
       "name": "Galaxy",
-      "revision": 1,
       "author": "kissd"
     },
     {
       "id": "retro",
       "name": "Retro",
-      "revision": 1,
       "author": "kissd"
     },
     {
       "id": "portal",
       "name": "Portal",
-      "revision": 1,
       "author": "kissd"
     }
   ]

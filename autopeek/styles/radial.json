@@ -1,8 +1,7 @@
 {
   "contract": 1,
-  "id": "glass",
-  "name": "Glass",
-  "revision": 5,
+  "id": "radial",
+  "name": "Radial",
   "controls": [
     {
       "key": "radius",
@@ -38,6 +37,5 @@
       ],
       "group": "colors"
     }
-  ],
-  "capture_background": true
+  ]
 }

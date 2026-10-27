@@ -1,19 +1,18 @@
 {
   "contract": 1,
-  "id": "ripples",
-  "name": "Ripples",
-  "revision": 1,
+  "id": "glass",
+  "name": "Glass",
   "controls": [
     {
       "key": "radius",
       "label": "Radius",
       "type": "slider",
       "slot": 4,
-      "min": 16,
+      "min": 10,
       "max": 100,
       "step": 1,
-      "default": 42,
-      "scale": 1
+      "default": 50,
+      "scale": 0.84
     },
     {
       "key": "opacity",
@@ -27,16 +26,6 @@
       "scale": 0.01
     },
     {
-      "key": "speed",
-      "label": "Speed",
-      "type": "slider",
-      "binding": "speed",
-      "min": 0,
-      "max": 300,
-      "step": 1,
-      "default": 100
-    },
-    {
       "key": "color",
       "label": "Color",
       "type": "color",
@@ -48,5 +37,6 @@
       ],
       "group": "colors"
     }
-  ]
+  ],
+  "capture_background": true
 }

@@ -2,7 +2,6 @@
   "contract": 1,
   "id": "hologram",
   "name": "Hologram",
-  "revision": 1,
   "controls": [
     {
       "key": "tint",

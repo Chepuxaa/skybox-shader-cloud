@@ -1,8 +1,7 @@
 {
   "contract": 1,
-  "id": "radial",
-  "name": "Radial",
-  "revision": 2,
+  "id": "halo",
+  "name": "Halo",
   "controls": [
     {
       "key": "radius",
@@ -27,16 +26,27 @@
       "scale": 0.01
     },
     {
+      "key": "speed",
+      "label": "Speed",
+      "type": "slider",
+      "binding": "speed",
+      "min": 0,
+      "max": 300,
+      "step": 1,
+      "default": 100
+    },
+    {
       "key": "color",
       "label": "Color",
       "type": "color",
       "slot": 1,
       "default": [
-        230,
-        177,
-        198
+        159,
+        190,
+        232
       ],
       "group": "colors"
     }
-  ]
+  ],
+  "author": "Codex"
 }

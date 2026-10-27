@@ -1,102 +1,98 @@
-# Shaders вЂ” cloud effect library
+# Shaders cloud library
 
-The public style library for three standalone clients, each with its own tab:
+HLSL effects and declarative controls for three independent Fatality Lua clients.
+The Lua clients and native bridges are not distributed by this repository.
 
-| Client | Menu section | Catalog |
+| Client | Catalog | Style files |
 | --- | --- | --- |
-| `skybox_cloud.lua` | Skybox | `manifest.json` |
-| `weapon_cloud.lua` | Weapon | `weapons/manifest.json` |
-| `autopeek_cloud.lua` | Autopeek | `autopeek/manifest.json` |
+| Skybox | `manifest.json` | `styles/<id>.json` and `styles/<id>.hlsl` |
+| Weapon | `weapons/manifest.json` | `weapons/styles/<id>.json` and `.hlsl` |
+| Autopeek | `autopeek/manifest.json` | `autopeek/styles/<id>.json` and `.hlsl` |
 
-Each client owns a separate top-level tab: **Skybox**, **Weapon** or **Autopeek**.
-No shared GUI coordinator, shared-memory transport or fourth Lua is used. The
-experimental shared-menu coordinator was removed after a live CS2 crash.
+Every style has exactly one JSON and one HLSL file. Edit those files in place.
+There are no numbered style files or per-effect revisions. Git history retains
+previous contents if a rollback is needed.
 
-The Lua and native bridge are not distributed through this repository.
-Only HLSL pixel shaders and declarative JSON controls are downloaded.
+## Editing and refreshing
 
-Included styles:
+For example, edit `autopeek/styles/glass.json` to change its controls or
+`autopeek/styles/glass.hlsl` to change its appearance. Commit the replacement,
+then press **Refresh library** in Autopeek. No manifest edit is needed when
+updating an existing style.
 
-- **Lines:** Static, Scroll and Wave; speed, wave strength, line count,
-  thickness, glow and three colors.
-- **Galaxy:** Static, Twinkle and Rotation; speed, star density, nebula,
-  star brightness and three colors.
-- **Retro:** Static, Forward and Drift; direction, elevation, sun size,
-  grid strength, glow and colors.
-- **Portal:** Static, Spin and Vortex; direction, elevation, angular size,
-  spiral strength, glow and colors.
-- **Weapon / Hologram:** local model scanlines, glow and one tint picker.
-- **Weapon / Galaxy:** the existing fixed galaxy style, anchored to camera
-  orientation rather than player translation.
-- **Autopeek / Ripples:** the existing 20-sided ring and outward waves;
-  color, radius, opacity and animation speed.
-- **Autopeek / Glass:** a smooth circular rim, blurred scene background and tinted
-  frosted-glass fill; color, radius and opacity.
-- **Autopeek / Radial:** a bright center fading continuously to a transparent
-  outer edge; color, radius and opacity.
+Refresh downloads the catalog and current style again, and marks other cached
+styles for a fresh download when selected. Every HTTP request has a cache-busting
+query. Working effects remain active if downloading, validation or compilation
+fails. Cached files remain available without HTTP; compatible user settings are
+preserved when controls refresh. Changed control types use their new defaults.
 
-The original Gradient is built into the Lua and remains available offline.
-Weapon includes Hologram and Autopeek includes Ripples as offline fallbacks.
-Successful downloads are cached when filesystem permission is enabled.
-The client fetches the catalog on startup and with **Refresh cloud styles**.
-New styles appear without a Lua update as long as they use contract 1.
+Use the updated Lua clients for this layout. Older clients that require numbered
+files cannot load the new library. No Lua update is needed for later style edits
+that remain within the existing shader/control contract.
 
-## Add or update a style
-
-1. Give the effect a lowercase ID such as `aurora`.
-2. Add `styles/aurora/1.json` describing the controls.
-3. Add `styles/aurora/1.hlsl` implementing a `main` pixel shader.
-4. Add `{"id":"aurora","name":"Aurora","author":"your name","revision":1}` to
-   the `effects` array in `manifest.json`.
-5. Compile/test before publishing. For changes, add a new numbered pair and
-   increase the catalog revision. Published numbered files are immutable.
-
-The catalog and per-effect JSON each have `"contract": 1`.
-The client accepts at most 24 cloud effects and 16 controls per effect.
-Each HLSL file is limited to 64 KiB. JSON files are limited to 32 KiB.
-IDs cannot contain paths or URLs. Downloads stay under this repository.
-The catalog `author` field is displayed as `Aurora (by your name)` and is also
-searchable. It accepts up to 32 characters. Older catalogs without this field
-remain compatible and display `Unknown`; no author is inferred from shader code.
-
-## Control schema
-
-See the included JSON files for working layouts. Each control has a unique
-`key`, a `label`, a `type`, a `default`, and either a parameter `slot` or
-the special `"binding": "speed"`. `group` is `main` or `colors`.
-
-| Type | Extra fields | GPU representation |
-| --- | --- | --- |
-| `slider` | `min`, `max`, `step`, optional `scale` | value Г— scale (default 1) |
-| `select` | `options`: array of labels | zero-based selected index |
-| `checkbox` | boolean default | 0 or 1 |
-| `color` | RGB default, e.g. `[180,222,255]` | 3 consecutive normalized floats |
-
-Example:
+To add a style, create `<id>.json` and `<id>.hlsl` in the appropriate `styles`
+directory, then add an entry to that catalog:
 
 ```json
 {
-  "key": "density",
-  "label": "Density",
-  "type": "slider",
-  "slot": 2,
-  "min": 0,
-  "max": 100,
-  "step": 1,
-  "default": 60,
-  "scale": 0.01
+  "contract": 1,
+  "effects": [
+    {"id": "halo", "name": "Halo", "author": "Codex"}
+  ]
 }
 ```
 
-Slots are **1вЂ“15**, must not overlap, and colors occupy three slots.
-A speed slider uses `"binding":"speed"` instead of `slot`, range 0вЂ“300,
-and controls the animation clock (100 = normal speed). It consumes no GPU slot.
-Slider formatting is selected locally; JSON cannot supply arbitrary printf formats.
+The author appears as **Halo (by Codex)** and is searchable. IDs are lowercase
+letters, digits, underscores and hyphens; no paths or arbitrary download URLs.
 
-## Skybox HLSL contract 1
+## Autopeek radius
 
-The shader receives a normalized world-facing direction in `TEXCOORD0`.
-Do not use screen coordinates to anchor the effect. Input/output and buffer:
+Radius starts at **50%**. In the radius control of each style's JSON, keep
+`default` at 50 and set `scale` to the desired world radius divided by 50:
+
+```json
+{
+  "key": "radius", "label": "Radius", "type": "slider", "slot": 4,
+  "min": 10, "max": 100, "step": 1, "default": 50, "scale": 0.84
+}
+```
+
+| Scale | Radius at 50% |
+| --- | ---: |
+| 0.60 | 30 |
+| 0.84 | 42 |
+| 1.00 | 50 |
+
+At 100%, the radius doubles. The client clamps physical radius to 8..128 world
+units. Each style can draw a different proportion inside that carrier. Updating
+`scale` changes size while preserving the user's percentage setting.
+
+Autopeek styles: **Ripples** (polygon ring and trailing waves), **Glass** (thin
+circular rim and blurred scene), **Radial** (soft center glow), and **Halo**
+(by Codex: thin contour, orbiting highlights and a restrained inner pulse).
+
+## Control schema
+
+Each descriptor has `contract: 1`, `id`, `name` and `controls`. See the included
+JSON files for complete examples. A control has a unique `key`, `label`, `type`,
+`default` and either a `slot` or the special `binding: "speed"`.
+
+| Type | Additional fields | Value |
+| --- | --- | --- |
+| slider | min, max, step, optional scale | displayed value multiplied by scale |
+| select | options | zero-based selected index |
+| checkbox | boolean default | 0 or 1 |
+| color | RGB default | three consecutive normalized floats |
+
+`group` is `main` or `colors`. Slots must not overlap. Color uses three slots.
+`binding: "speed"` has no slot and controls animation time; 100 means normal
+speed. The catalog supports 24 effects and each descriptor supports 16 controls.
+HLSL is limited to 64 KiB, JSON to 32 KiB; external includes are rejected.
+
+## Skybox shader contract
+
+Skybox targets `ps_5_0`, receives the world-facing direction in `TEXCOORD0`,
+and uses a 64-byte constant buffer at `b6`:
 
 ```hlsl
 cbuffer Custom : register(b6) {
@@ -105,156 +101,65 @@ cbuffer Custom : register(b6) {
     float4 c_high;
     float4 c_glow;
 };
-struct ps_in {
-    float3 dir : TEXCOORD0;
-    float4 position : SV_Position;
-};
-float4 main(ps_in i) : SV_Target0 {
-    return float4(c_low.rgb, 1.0);
-}
+struct ps_in { float3 dir:TEXCOORD0; float4 position:SV_Position; };
+float4 main(ps_in i):SV_Target0 { return float4(c_low.rgb,1); }
 ```
 
-| Component | Meaning |
-| --- | --- |
-| `c_params.x` | animation clock in seconds, affected by the speed slider |
-| `c_params.yzw` | slots 1, 2, 3 |
-| `c_low.xyzw` | slots 4, 5, 6, 7 |
-| `c_high.xyzw` | slots 8, 9, 10, 11 |
-| `c_glow.xyzw` | slots 12, 13, 14, 15 |
+`c_params.x` is animation time; the remaining 15 floats are slots 1..15.
+A Static selector must ignore animation time in HLSL. Included styles are
+Lines, Galaxy, Retro and Portal; Gradient is embedded in the client.
 
-Slots are general parameters; these legacy vector names do not require colors.
-The clock is not automatically stopped by an animation selector: HLSL decides
-which selector index means Static and ignores the clock in that mode.
-Target is `ps_5_0`. No textures, external includes, extra buffers, native modules
-or Lua downloads are part of contract 1. Those features require a client change.
+## Weapon shader contract
 
-The client compiles a downloaded shader before switching. Download, schema,
-compilation or shader-creation failure keeps the current working shader.
-A successful switch publishes the shader and its initial parameters under the
-native binding lock. UI and compilation work run outside the HTTP callback.
+Weapon targets `ps_5_0` and uses the same `b6` constant-buffer layout. Only
+slots 1..7 are available to effect controls; slots 8..15 hold viewport origin,
+viewport size, reference vertical projection tangent and camera angles.
+Only `csgo_weapon.vfx_ps` is replaced. Hologram uses the existing local-position
+`TEXCOORD8`; Galaxy uses pixel position and the camera projection. Do not add
+vertex-input dependencies that the original draw does not supply.
 
-## Weapon contract 1
+## Autopeek shader contract
 
-Files live under `weapons/styles/<id>/<revision>.*`. JSON controls follow the
-same schema. **Only slots 1вЂ“7 are available to effects**. Slots 8вЂ“15 are written
-by the renderer and cannot be assigned controls:
+Autopeek targets `ps_4_0` and uses Fatality's GUI pixel-shader input:
 
-| Slots | Meaning |
-| --- | --- |
-| 8, 9 | viewport origin (0, 0) |
-| 10, 11 | client viewport width and height |
-| 12 | reference vertical projection tangent |
-| 13, 14, 15 | camera pitch, yaw and roll in radians |
+```hlsl
+cbuffer cb:register(b0) { float4x4 mvp; float2 tex; float time; float alpha; };
+struct Input { float4 pos:SV_POSITION; float4 col:COLOR0; float2 uv:TEXCOORD0; };
+```
 
-The 64-byte constant buffer remains at `b6`; time is at float index 0.
-Galaxy uses a pixel position input and camera projection; Hologram additionally
-uses the existing `TEXCOORD8` local-position input. See their HLSL for exact
-signatures. Do not introduce vertex input dependencies a weapon does not supply.
-Only `csgo_weapon.vfx_ps` is replaced. Character shaders remain excluded.
-The native swap publishes the replacement and its parameters under the binding
-lock; an unsuccessful compilation/swap preserves the previous shader.
+Slots 1..3 are RGB through `i.col.rgb`, slot 4 is the ground-plane radius, slot
+5 is opacity through `i.col.a`. Slots 6..15 are reserved. Integer UV offsets
+encode animation time and release age; use the included effects to decode them.
+Ripples uses a 2.4-second wave lifecycle with emission offsets .25, 1.05 and 1.85.
+Other styles can fade with the supplied release age.
 
-## Autopeek contract 1
+The client wraps Autopeek HLSL for scene-depth occlusion. Leave `t1` and `b1/b2`
+free. The observed world depth range is 0..0.95; the separate viewmodel range
+must not replace it. The current depth path targets D24 MSAA x4.
 
-Files live under `autopeek/styles/<id>/<revision>.*`. These are **GUI pixel
-shaders (`ps_4_0`)**, using the existing `b0` GUI buffer and the `Input` signature
-in Ripples. This client adds no D3D hooks. It validates HLSL before creating a
-managed shader, and retains managed shaders in Fatality's cache so queued draw
-commands cannot reference a destroyed object.
+An optional `capture_background: true` descriptor binds the shared scene texture
+at `t0` with sampler `s0`. Glass uses screen-position UVs for blur. The shared
+image may include HUD already rendered at capture time; depth masking alone
+does not resolve that interaction.
 
-Its controls have fixed CPU meanings:
+## Permissions and development
 
-| Slots | Meaning |
-| --- | --- |
-| 1вЂ“3 | normalized RGB, passed through `i.col.rgb` |
-| 4 | ground-plane projection radius, in world units |
-| 5 | opacity multiplier, passed through `i.col.a` |
-| 6вЂ“15 | reserved; not available to controls |
+Clients require FFI and HTTP. Filesystem permission is optional for offline
+caching. Use one client per category; each owns its own tab. Tools are developer
+build/check helpers and are not required by users. Existing native bridges are
+embedded in the standalone Lua files; style files never execute Lua or native
+modules.
 
-The optional `binding: speed` slider changes animation speed on the CPU.
-Changing these values does not recompile HLSL. Arbitrary extra GPU uniforms are
-not supported by this renderer; those require a client contract update.
-
-Fractional UV coordinates describe the projected plane. Integer UV offsets
-carry animation time and release age; decode them exactly as Ripples does.
-The lifecycle uses a 2.4-second wave period with emission offsets 0.25, 1.05
-and 1.85 seconds. Keep new effects within this release envelope, or fade using
-the supplied release age. The main ring stops on release; emitted waves finish.
-The existing screen projection and depth behavior are unchanged.
-
-## Client permissions and checks
-
-Enable **FFI** and **HTTP**. **Filesystem** is optional for disk caching.
-Disable other sky-effect scripts before loading the cloud client.
-For Weapon, disable `weapon_galaxy.lua` / `weapon_hologram.lua` before loading
-`weapon_cloud.lua`. For Autopeek, disable `autopeek_portal.lua` before loading
-`autopeek_cloud.lua`. The three cloud clients use distinct tab IDs and do not share GUI containers.
-This library does not distribute the client or make guarantees about Marketplace
-approval or compatibility with future CS2/Fatality changes.
-
-Development checks in the client workspace:
+Offline checks from the client workspace:
 
 ```text
+python tools/check_cloud_refresh.py
 python tools/check_sky_cloud.py
-python tools/check_sky_bridge.py skybox_cloud.lua
-python tools/check_weapon_galaxy.py weapon_cloud.lua
-python tools/check_autopeek_portal.py autopeek_cloud.lua
 python tools/check_cloud_assets.py
 python tools/check_shader_menus.py
+python tools/check_autopeek_cloud.py
+python tools/check_autopeek_mask_client.py
 ```
 
-These are offline checks; in-game appearance and the actual Fatality UI still
-need to be tested in Fatality.
-
-### Autopeek background sampling
-
-Glass revision 3 requires the Autopeek client with `capture_background` support.
-The optional boolean descriptor field binds the shared scene-background texture
-from `draw.adapter:GetSharedTexture()` to the shader. Fatality updates it once
-before the drawing layer; mesh cells reuse that snapshot without recapturing it.
-The previous texture and command flags are restored after drawing. Background
-UVs come from screen position, not the encoded plane UVs.
-This is a screen-space blur and does not provide scene depth or player occlusion.
-
-
-### Autopeek style updates
-
-Glass revision 4 keeps the revision 3 scene blur and uses a thinner outline with
-a tighter glow fringe. Earlier immutable revisions remain available.
-
-Halo (by Codex), revision 1, adds a thin round contour, two slowly orbiting light
-accents, a faint interior and a restrained expanding pulse. It uses the standard
-Radius, Opacity, Speed and Color controls and needs no background capture. Its
-release fade follows the existing encoded-UV contract; no Lua update is needed.
-
-The current Autopeek client depth-masks these GUI shaders against scene depth.
-Effect authors must leave t1 and b1/b2 free for that client wrapper. The observed
-world viewport range is 0..0.95; the client excludes the separate viewmodel band.
-
-
-### Per-style radius at 50 percent
-
-The updated Autopeek client displays Radius in percent. New descriptors start
-at 50, which retains the previous physical radius of 42 world units. The existing
-slider conversion is unchanged: `world_radius = displayed_percent * scale`.
-
-To give each style a different initial size while keeping 50% in the menu,
-change only its radius control's `scale`. For example:
-
-```json
-{"key":"radius","label":"Radius","type":"slider","slot":4,
- "min":10,"max":100,"step":1,"default":50,"scale":0.84}
-```
-
-Use scale 0.60 for radius 30 at 50%, 0.84 for radius 42, or 1.00 for radius 50.
-The formula is `scale = desired_radius_at_50 / 50`. The displayed default stays
-50; do not change it to set physical size. At 100% the radius is twice the 50%
-size. The renderer currently clamps physical radius to 8..128 world units.
-Styles draw different proportions inside that carrier, so compare them in game
-when choosing a baseline. Existing user choices within a style revision remain
-preserved; descriptor defaults apply when that revision is first selected.
-
-Publish a new immutable JSON/HLSL revision and update the manifest after changes,
-even if HLSL itself is identical. Refresh library fetches it; editing GitHub assets
-does not update an already cached immutable revision. An updated client Lua is
-needed for the percent suffix; older clients still apply the same scale correctly.
+Checks do not attach to CS2. Actual appearance still needs validation in Fatality.
+Marketplace approval and compatibility with future game updates are not promised.

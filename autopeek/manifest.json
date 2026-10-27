@@ -4,25 +4,21 @@
     {
       "id": "ripples",
       "name": "Ripples",
-      "revision": 2,
       "author": "kissd"
     },
     {
       "id": "glass",
       "name": "Glass",
-      "revision": 5,
       "author": "kissd"
     },
     {
       "id": "radial",
       "name": "Radial",
-      "revision": 2,
       "author": "kissd"
     },
     {
       "id": "halo",
       "name": "Halo",
-      "revision": 2,
       "author": "Codex"
     }
   ]
