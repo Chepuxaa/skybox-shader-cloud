@@ -5,7 +5,7 @@ The Lua clients and native bridges are not distributed by this repository.
 
 | Client | Catalog | Style files |
 | --- | --- | --- |
-| Skybox | `manifest.json` | `styles/<id>.json` and `styles/<id>.hlsl` |
+| Skybox | `skybox/manifest.json` | `skybox/styles/<id>.json` and `.hlsl` |
 | Weapon | `weapons/manifest.json` | `weapons/styles/<id>.json` and `.hlsl` |
 | Autopeek | `autopeek/manifest.json` | `autopeek/styles/<id>.json` and `.hlsl` |
 
