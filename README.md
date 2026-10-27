@@ -8,6 +8,11 @@ The public style library for three standalone clients in the shared **Shaders** 
 | `weapon_cloud.lua` | Weapon | `weapons/manifest.json` |
 | `autopeek_cloud.lua` | Autopeek | `autopeek/manifest.json` |
 
+No fourth GUI-host script is needed. Each client embeds a coordinator: one active
+client owns the whole GUI while the others exchange serialized settings with it
+through a PID-scoped Windows shared-memory channel. GUI objects stay in their
+owner's Lua state. A remaining client can take over when the owner unloads.
+
 The Lua and native bridge are not distributed through this repository.
 Only HLSL pixel shaders and declarative JSON controls are downloaded.
 
@@ -192,7 +197,8 @@ python tools/check_sky_bridge.py skybox_cloud.lua
 python tools/check_weapon_galaxy.py weapon_cloud.lua
 python tools/check_autopeek_portal.py autopeek_cloud.lua
 python tools/check_cloud_assets.py
-python tools/check_shader_menus.py
+python tools/check_shader_coordination.py
+python tools/check_shader_cloud_bus.py
 ```
 
 These are offline checks; in-game appearance and the actual Fatality UI still
