@@ -21,7 +21,7 @@ float4 main(Input i):SV_Target {
     clip(.90-radius);
     float edge=.83;
     float inside=1-smoothstep(edge-aa,edge+aa,radius);
-    float rim=1-smoothstep(.005,.005+aa*.75,abs(radius-edge));
+    float rim=1-smoothstep(.009,.009+aa*.75,abs(radius-edge));
     float rimGlow=exp(-abs(radius-edge)*90)*.08*(1-smoothstep(.865,.90,radius));
     // The GUI projection supplies full viewport dimensions independently of the
     // downsampled background texture. Encoded plane UVs only define the circle.
